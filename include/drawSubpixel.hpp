@@ -15,6 +15,8 @@ class SubpixelWorkspace {
 protected:
     int zoomScale;
     cv::Mat zoomedImage;
+    cv::Mat temporaryImg;
+    bool retTemp;
 
     // Top boundary (row value) of the section of the original image that was cropped out.
     int leftRow;
@@ -49,6 +51,8 @@ public:
      */
     void drawCircle(double row, double col, double radius, const cv::Scalar &color = COLOR_GREEN);
 
+    void drawTempCircle(double row, double col, double radius, const cv::Scalar &color = COLOR_GREEN);
+
     /**
      * @brief Draws a point on the zoomed image
      * @details Automatically transforms circle parameters from the original coordinate space to the zoomed coordinate space
@@ -59,6 +63,8 @@ public:
      * @param color Color to draw the circle in.
      */
     void drawPoint(double row, double col, const cv::Scalar &color = COLOR_GREEN);
+
+    void drawTempPoint(double row, double col, const cv::Scalar &color = COLOR_GREEN);
 
     /**
      * @brief Draws a line on the zoomed image
@@ -73,6 +79,8 @@ public:
      */
     void drawLine(double rowStart, double colStart, double rowEnd, double colEnd, const cv::Scalar &color = COLOR_GREEN);
 
+    void drawTempLine(double rowStart, double colStart, double rowEnd, double colEnd, const cv::Scalar &color = COLOR_GREEN);
+
     /**
      * @brief Draws a rectangle on the zoomed image
      * @details Automatically transforms rectangle parameters from the original coordinate space to the zoomed coordinate space
@@ -82,8 +90,9 @@ public:
      * @param color Color to draw the rectangle in.
      * @param drawCorners Boolean toggle to circle the corners of the rectangle in the zoomed image.
      */
-    void drawRect(const std::vector<cv::Point2d> &corners, const cv::Scalar &color = COLOR_GREEN,
-                  bool drawCorners = false);
+    void drawRect(const std::vector<cv::Point2d> &corners, const cv::Scalar &color = COLOR_GREEN, bool drawCorners = false);
+
+    void drawTempRect(const std::vector<cv::Point2d> &corners, const cv::Scalar &color = COLOR_GREEN, bool drawCorners = false);
 
     /**
      * @brief Draws an ellipse on the zoomed image
@@ -97,15 +106,22 @@ public:
      * @param longRadius Length of the long radius in the ORIGINAL coordinate space.
      * @param color Color to draw the ellipse in.
      */
-    void drawEllipse(double row, double col, double phi, double shortRadius, double longRadius,
-                     const cv::Scalar &color = COLOR_GREEN);
+    void drawEllipse(double row, double col, double phi, double shortRadius, double longRadius, const cv::Scalar &color = COLOR_GREEN);
+
+    void drawTempEllipse(double row, double col, double phi, double shortRadius, double longRadius, const cv::Scalar &color = COLOR_GREEN);
 
     /**
      * @brief Returns the zoomed image with all the requested drawings.
      * 
      * @return A reference to the zoomed-in image with drawings.
      */
-    const cv::Mat &getZoomedImage() const { return zoomedImage; }
+    const cv::Mat &getZoomedImage() {
+        if (retTemp) {
+            retTemp = false;
+            return temporaryImg;
+        }
+        return zoomedImage;
+    };
 };
 
 cv::Point2d reverse(const cv::Point2d &pt) {
