@@ -6,7 +6,7 @@
 #ifndef DRAW_MEASURING_HPP
 #define DRAW_MEASURING_HPP
 
-#include "measuring.hpp"
+#include "MeasuringResults.hpp"
 #include "drawingDefs.hpp"
 
 /**
@@ -17,7 +17,7 @@
  * @param results A MeasurePosResult struct
  * @param color The color to draw the edge results in. Default value is Red
  */
-void drawMeasurePos(cv::Mat &img, const MeasurePosResult &results, const cv::Scalar &color = COLOR_RED);
+void drawMeasurePos(cv::Mat &img, const MeasurePosResults &results, const cv::Scalar &color = COLOR_RED);
 
 /**
  * @fn (cv::Mat &img, const MeasurePairsResult &results,
@@ -29,7 +29,7 @@ void drawMeasurePos(cv::Mat &img, const MeasurePosResult &results, const cv::Sca
  * @param colorLeft The color to draw the left edge in. Default value is Orange
  * @param colorRight The color to draw the right edge in. Default value is DarkViolet
  */
-void drawMeasurePairs(cv::Mat &img, const MeasurePairsResult &results,
+void drawMeasurePairs(cv::Mat &img, const MeasurePairsResults &results,
                       const cv::Scalar &colorLeft = COLOR_ORANGE, const cv::Scalar &colorRight = COLOR_DARKVIOLET);
 
 #endif  //  DRAW_MEASURING.hpp

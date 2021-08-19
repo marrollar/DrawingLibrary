@@ -5,8 +5,8 @@ constexpr int CIRCLE_THICKNESS = -1;
 
 using namespace cv;
 
-void drawMeasurePos(Mat &img, const MeasurePosResult &results, const Scalar &color) {
-    std::vector<Point2d> posEdges = results.pos;
+void drawMeasurePos(Mat &img, const MeasurePosResults &results, const Scalar &color) {
+    std::vector<Point2d> posEdges = results.edgePositions;
 
     auto posIter = posEdges.begin();
 
@@ -17,7 +17,7 @@ void drawMeasurePos(Mat &img, const MeasurePosResult &results, const Scalar &col
     }
 }
 
-void drawMeasurePairs(Mat &img, const MeasurePairsResult &results, const Scalar &colorLeft, const Scalar &colorRight) {
+void drawMeasurePairs(Mat &img, const MeasurePairsResults &results, const Scalar &colorLeft, const Scalar &colorRight) {
     std::vector<Point2d> posFirst = results.posFirst;
     std::vector<Point2d> posSecond = results.posSecond;
 

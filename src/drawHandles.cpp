@@ -3,7 +3,7 @@
 
 using namespace cv;
 
-void SubpixelMeasureWorkspace::drawMeasureHandle(MeasureRectangle &measure, const cv::Scalar &color, const bool drawCorners) {
+void SubpixelMeasureWorkspace::drawMeasureHandle(RectangleElement &measure, const cv::Scalar &color, const bool drawCorners) {
     std::vector<Point2d> corners = ::getRectPoints(measure);
 
     double rectRow = measure.getRow();
@@ -16,7 +16,7 @@ void SubpixelMeasureWorkspace::drawMeasureHandle(MeasureRectangle &measure, cons
     drawRect(corners, color, drawCorners);
 }
 
-void SubpixelMeasureWorkspace::drawMeasureHandle(MeasureArc &measure, const cv::Scalar &color) {
+void SubpixelMeasureWorkspace::drawMeasureHandle(ArcElement &measure, const cv::Scalar &color) {
     double row = measure.getRow();
     double col = measure.getColumn();
     double innerRad = measure.getInnerRadius();
@@ -26,9 +26,19 @@ void SubpixelMeasureWorkspace::drawMeasureHandle(MeasureArc &measure, const cv::
     drawCircle(row, col, outerRad, color);
 }
 
-void drawMeasureHandle(Mat &img, const MeasureRectangle &measureHandle, const Scalar &color, const bool drawCorners) {
+void SubpixelMeasureWorkspace::drawMeasureHandle(ArcTransposedElement &measure, const cv::Scalar &color) {
+    double row = measure.getRow();
+    double col = measure.getColumn();
+    double innerRad = measure.getInnerRadius();
+    double outerRad = measure.getRadius();
+
+    drawCircle(row, col, innerRad, color);
+    drawCircle(row, col, outerRad, color);
+}
+
+void drawMeasureHandle(Mat &img, const RectangleElement &measureHandle, const Scalar &color, const bool drawCorners) {
     // Get the four points of the rectangle as (r, c) coordinates (before adjusting for center of measureHandle)
-    std::vector<Point2d> rectPoints = getRectPoints(measureHandle);
+    std::vector<Point2d> rectPoints = measureHandle.getCornerPoints();
 
     for (Point2d &point : rectPoints) {
         // Adjust for center of measureHandle
@@ -60,13 +70,35 @@ void drawMeasureHandle(Mat &img, const MeasureRectangle &measureHandle, const Sc
     }
 }
 
-void drawMeasureHandle(Mat &img, const MeasureArc &measureHandle, const Scalar &color) {
+void drawMeasureHandle(Mat &img, const ArcElement &measureHandle, const Scalar &color) {
     int r = measureHandle.getRow();
     int c = measureHandle.getColumn();
     int radius = measureHandle.getRadius();
     int innerRad = measureHandle.getInnerRadius();
     double angleStart = measureHandle.getAngleStart();
     double angleEnd = measureHandle.getAngleExtent();
+
+    int xStart = c + int(round(radius * cos(angleStart)));
+    int yStart = r - int(round(radius * sin(angleStart)));
+
+    int xEnd = c + int(round(radius * cos(angleEnd)));
+    int yEnd = r - int(round(radius * sin(angleEnd)));
+
+    Point2d center(c, r);
+
+    circle(img, center, radius, color, 1, LINE_AA);
+    circle(img, center, innerRad, color, 1, LINE_AA);
+    line(img, center, Point2d(xStart, yStart), color, 1, LINE_AA);
+    line(img, center, Point2d(xEnd, yEnd), COLOR_RED, 1, LINE_AA);
+}
+
+void drawMeasureHandle(Mat &img, const ArcTransposedElement &measureHandle, const Scalar &color) {
+    int r = measureHandle.getRow();
+    int c = measureHandle.getColumn();
+    int radius = measureHandle.getRadius();
+    int innerRad = measureHandle.getInnerRadius();
+    double angleStart = measureHandle.getAngleStart();
+    double angleEnd = angleStart + measureHandle.getAngleExtent();
 
     int xStart = c + int(round(radius * cos(angleStart)));
     int yStart = r - int(round(radius * sin(angleStart)));
