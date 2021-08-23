@@ -1,10 +1,9 @@
 #include "drawHandles.hpp"
-#include "mutils.hpp"
 
 using namespace cv;
 
 void SubpixelMeasureWorkspace::drawMeasureHandle(RectangleElement &measure, const cv::Scalar &color, const bool drawCorners) {
-    std::vector<Point2d> corners = ::getRectPoints(measure);
+    std::vector<Point2d> corners = measure.getCornerPoints();
 
     double rectRow = measure.getRow();
     double rectCol = measure.getColumn();

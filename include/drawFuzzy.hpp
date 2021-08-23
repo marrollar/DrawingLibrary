@@ -6,7 +6,7 @@
 #ifndef DRAW_FUZZY_HPP
 #define DRAW_FUZZY_HPP
 
-#include "fuzzyMeasuring.hpp"
+#include "FuzzyStructs.hpp"
 #include "drawingDefs.hpp"
 
 /**

@@ -12,7 +12,7 @@ using namespace cv;
  * which would make the drawMeasuring source sort of confusing and a bit inconsistent when only one of its methods is templated and not the other.
  */
 void drawFuzzyPos(Mat &img, const FuzzyMeasurePosResult &results, const Scalar &color) {
-    std::vector<Point2d> posEdges = results.pos;
+    std::vector<Point2d> posEdges = results.edgePositions;
 
     auto posIter = posEdges.begin();
 
@@ -32,8 +32,8 @@ void drawFuzzyPairs(Mat &img, const FuzzyMeasurePairsResult &results, bool drawC
     auto p2 = posSecond.begin();
 
     while (p1 < posFirst.end() && p2 < posSecond.end()) {
-        circle(img, reverse(*p1), RADIUS, colorLeft, CIRCLE_THICKNESS, LINE_AA);
-        circle(img, reverse(*p2), RADIUS, colorRight, CIRCLE_THICKNESS, LINE_AA);
+        circle(img, *p1, RADIUS, colorLeft, CIRCLE_THICKNESS, LINE_AA);
+        circle(img, *p2, RADIUS, colorRight, CIRCLE_THICKNESS, LINE_AA);
         std::advance(p1, 1);
         std::advance(p2, 1);
     }
@@ -43,7 +43,7 @@ void drawFuzzyPairs(Mat &img, const FuzzyMeasurePairsResult &results, bool drawC
         auto pc = posCenter.begin();
 
         while (pc < posCenter.end()) {
-            circle(img, reverse(*pc), RADIUS, colorCenter, CIRCLE_THICKNESS, LINE_AA);
+            circle(img, *pc, RADIUS, colorCenter, CIRCLE_THICKNESS, LINE_AA);
 
             std::advance(pc, 1);
         }
